@@ -50,7 +50,7 @@ def sign_up():
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
         else:
-            new_user=User(email=email,first_name=first_name,password=generate_password_hash(password1, method='sha256'))
+            new_user=user(email=email,first_name=first_name,password=generate_password_hash(password1, method='scrypt'))
             db.session.add(new_user)
             db.session.commit()
             flash('Account created!', category='success')
@@ -58,3 +58,25 @@ def sign_up():
             return redirect(url_for('views.home'))
         
     return render_template("sign_up.html", user=current_user)
+
+@auth.route('/reset-password',methods=['GET', 'POST'])
+@login_required
+def reset_password():
+    if request.method == 'POST':
+        current_pass = request.form.get('password1')
+        new_pass = request.form.get('password2')
+        confirm_pass = request.form.get('password3')
+        
+        if check_password_hash(current_user.password, current_pass):
+            if new_pass != confirm_pass:
+                flash('New passwords are not matched!', category='error')
+            elif len(new_pass) < 7:
+                flash('Password must be at least 7 characters.', category='error')
+            else:
+                current_user.password = generate_password_hash(new_pass,method='scrypt')
+                db.session.add(current_user)
+                db.session.commit()
+                flash('Reset password!', category="success")
+        else:
+            flash('Incorrect current password!', category='error')
+    return render_template('reset_password.html', user=current_user)
