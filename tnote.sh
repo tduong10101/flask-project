@@ -1,2 +1,2 @@
 cd /home/python/flask-project
-/home/python/.local/bin/gunicorn -w 4 "website:create_app()"
+/home/python/.local/bin/gunicorn -w 4 -b 0.0.0.0:8000 "website:create_app()"
