@@ -1,9 +1,0 @@
-[Unit]
-Description=flask tnote service
-After=network.target
-
-[Service]
-Type=simple
-ExecStart=/home/python/flask-project/start_tnote.sh
-
-
