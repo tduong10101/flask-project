@@ -19,9 +19,9 @@ DB_NAME='database'
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'asdiuwqopttn23947'
-    url=f"{SQL_USERNAME}:{SQL_PASSWORD}@{SQL_HOST}:{SQL_PORT}/database?charset=utf8"
+    url=f"mysql+pymysql://{SQL_USERNAME}:{SQL_PASSWORD}@{SQL_HOST}:{SQL_PORT}/database?charset=utf8"
     print(url)
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{url}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = url
     # app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1, x_prefix=1)
     db.init_app(app)
     
@@ -32,7 +32,7 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
 
     from .models import User, Note
-    create_db(f'mysql+pymysql://{url}',app)
+    create_db(url,app)
     
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
