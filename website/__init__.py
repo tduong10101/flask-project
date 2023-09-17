@@ -1,16 +1,27 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import os
 from os import path
 from flask_login import LoginManager
 from werkzeug.middleware.proxy_fix import ProxyFix
+from dotenv import load_dotenv
+from sqlalchemy_utils import database_exists, create_database
 
 db = SQLAlchemy()
-DB_NAME = "database.db"
+load_dotenv()
+
+SQL_USERNAME=os.getenv('SQL_USERNAME')
+SQL_PASSWORD=os.getenv('SQL_PASSWORD')
+SQL_HOST=os.getenv('SQL_HOST')
+SQL_PORT=os.getenv('SQL_PORT')
+DB_NAME='database'
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'asdiuwqopttn23947'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    url=f"{SQL_USERNAME}:{SQL_PASSWORD}@{SQL_HOST}:{SQL_PORT}/database?charset=utf8"
+    print(url)
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{url}'
     # app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1, x_prefix=1)
     db.init_app(app)
     
@@ -21,7 +32,7 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
 
     from .models import User, Note
-    create_database(app)
+    create_db(f'mysql+pymysql://{url}',app)
     
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
@@ -33,8 +44,13 @@ def create_app():
 
     return app
 
-def create_database(app):
-    if not path.exists('instance/' + DB_NAME):
-        with app.app_context():
-            db.create_all()
-        print('Created Database!')
+def create_db(url,app):
+    try:
+        if not database_exists(url):
+            create_database(url)
+            with app.app_context():
+                db.create_all()
+            print('Created Database!')
+    except Exception as e:
+        if e.code!='f405':
+            raise e
