@@ -37,6 +37,13 @@ jobs:
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ap-southeast-2
       
+      - name: Generate vars.tfvars
+        run: |
+          cat > "./vars.tfvars" <<EOF
+            db_pass = "${{ secrets.db_pass }}"
+          EOF
+          
+          cat ./vars.tfvars
       - name: Terraform init
         run: terraform init
 
@@ -45,8 +52,8 @@ jobs:
       
       - name: Terraform apply
         if: ${{ inputs.terraform_job == 'apply'}}
-        run: terraoform apply -input=false -auto-approve
+        run: terraoform apply -var-file=vars.tfvars -input=false -auto-approve
       
       - name: Terraform destroy
         if: ${{ inputs.terraform_job == 'destroy'}}
-        run: terraform destroy -input=false -auto-approve
+        run: terraform destroy -var-file=vars.tfvars -input=false -auto-approve
