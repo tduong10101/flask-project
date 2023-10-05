@@ -1,4 +1,4 @@
-name: aws-tf-resources
+name: infra
 on:
   workflow_dispatch:
     inputs:
