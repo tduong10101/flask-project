@@ -1,14 +1,21 @@
 name: network
-on: 
-    workflow_dispatch:
+on:
+  workflow_dispatch:
 
 permissions:
-    contents: read
-    id-token: write
+  contents: read
+  id-token: write
 jobs:
-    terraform:
-        name: 'Terraform'
-        runs-on: ubuntu-latest
-        environment: production
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    environment: production
 
-        
+    defaults:
+      run:
+        shell: bash
+        working-directory: "./terraform/"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
