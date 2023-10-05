@@ -52,7 +52,7 @@ jobs:
       
       - name: Terraform apply
         if: ${{ inputs.terraform_job == 'apply'}}
-        run: terraoform apply -var-file=vars.tfvars -input=false -auto-approve
+        run: terraform apply -var-file=vars.tfvars -input=false -auto-approve
       
       - name: Terraform destroy
         if: ${{ inputs.terraform_job == 'destroy'}}
