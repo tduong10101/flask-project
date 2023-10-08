@@ -5,4 +5,5 @@ WORKDIR /home/python
 RUN git clone https://github.com/tduong10101/tnote.git
 WORKDIR /home/python/tnote
 RUN pip3 install -r requirements.txt && chmod +x tnote.sh
+ENV PATH="/home/python/.local/bin:$PATH"
 CMD ["bash","tnote.sh"]
