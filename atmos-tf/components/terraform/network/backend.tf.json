@@ -1,12 +1,12 @@
 {
    "terraform": {
-   "backend": {
-   "s3": {
-   "bucket": "tduong10101-terraform-state-bucket",
-   "key": "tnote_network.tfstate",
-   "region": "ap-southeast-2",
-   "workspace_key_prefix": "network"
-}
-}
-}
+      "backend": {
+         "s3": {
+            "bucket": "tduong10101-terraform-state-bucket",
+            "key": "tnote_network.tfstate",
+            "region": "ap-southeast-2",
+            "workspace_key_prefix": "network"
+         }
+      }
+   }
 }
