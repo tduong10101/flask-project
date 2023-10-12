@@ -1,9 +1,9 @@
 vars:
   tenant: tduong
-  environment: ap2
+  environment: aps2
   stage: dev
   backend_type: s3
-  namespace: tduong-ap2
+  namespace: tduong-aps2
   # backend:
   #   s3:
   #     bucket: "tduong10101-terraform-state-bucket"
