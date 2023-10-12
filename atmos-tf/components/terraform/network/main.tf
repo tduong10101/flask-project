@@ -14,6 +14,7 @@ resource "aws_internet_gateway" "gateway" {
         Name = var.namespace
         Stage = var.stage
     }
+    depends_on = [ aws_vpc.main ]
 }
 
 resource "aws_default_route_table" "route_table" {
@@ -28,6 +29,7 @@ resource "aws_default_route_table" "route_table" {
         Name = var.namespace
         Stage = var.stage
     }
+    depends_on = [ aws_vpc.main ]
 }
 
 resource "aws_subnet" "sn1" {
@@ -38,6 +40,7 @@ resource "aws_subnet" "sn1" {
         Name = var.namespace
         Stage = var.stage
     }
+    depends_on = [ aws_vpc.main ]
 }
 
 resource "aws_subnet" "sn2" {
@@ -48,6 +51,7 @@ resource "aws_subnet" "sn2" {
         Name = var.namespace
         Stage = var.stage
     }
+    depends_on = [ aws_vpc.main ]
 }
 
 resource "aws_subnet" "sn3" {
@@ -58,4 +62,5 @@ resource "aws_subnet" "sn3" {
         Name = var.namespace
         Stage = var.stage
     }
+    depends_on = [ aws_vpc.main ]
 }
