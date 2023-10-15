@@ -52,7 +52,7 @@ jobs:
       - name: Run terraform plan
         run: |
           export stack=${BRANCH_NAME#env/}
-          atmost terraform plan network -s $stack
+          atmos terraform plan network -s $stack
 # check if PR type is opened
 # then run atmos tf plan
 # check if PR type is closed
