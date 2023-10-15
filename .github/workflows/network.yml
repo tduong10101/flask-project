@@ -30,6 +30,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::069363837566:role/github-vpc
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ap-southeast-2
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -43,7 +44,7 @@ jobs:
       - name: Validate branch
         run: |
           if [[ $BRANCH_NAME == "env/"* ]]; then
-            echo "Valid branch. Current branch is: "
+            echo "Valid branch. Current branch is: $BRANCH_NAME"
           else
             echo "Invalid branch. Branch must be under env/*"
             exit 1
