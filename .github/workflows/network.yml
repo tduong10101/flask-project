@@ -39,6 +39,7 @@ jobs:
         uses: cloudposse/github-action-setup-atmos@1.0.2
         with:
           atmos-version: 1.45.3
+          install-wrapper: false
       
       # check if branch is env/*
       - name: Validate branch
