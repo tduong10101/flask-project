@@ -1,21 +1,57 @@
 name: network
 on:
+  pull_request:
+    types: [opened, reopened, closed]
   workflow_dispatch:
+
+env:
+  BRANCH_NAME: ${{github.base_ref || github.ref_name}}
 
 permissions:
   contents: read
   id-token: write
+
 jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
-    environment: production
 
     defaults:
       run:
         shell: bash
-        working-directory: "./terraform/"
+        working-directory: "./atmos-tf/"
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::069363837566:role/github-vpc
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+
+      - name: Setup TF
+        uses: hashicorp/setup-terraform@v2
+        with:
+          version: 1.6.0
+      
+      - name: Setup Atmos
+        uses: cloudposse/github-action-setup-atmos@1.0.2
+        with:
+          atmos-version: 1.45.3
+      
+      # check if branch is env/*
+      - name: Validate branch
+        run: |
+          if [[ $BRANCH_NAME == "env/"* ]]; then
+            echo "Valid branch. Current branch is: "
+          else
+            echo "Invalid branch. Branch must be under env/*"
+            exit 1
+          fi
+
+# check if PR type is opened
+# then run atmos tf plan
+# check if PR type is closed
+# then run tf apply
