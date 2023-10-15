@@ -1,0 +1,4 @@
+import:
+- tnote/_defaults
+vars:
+  stage: dev

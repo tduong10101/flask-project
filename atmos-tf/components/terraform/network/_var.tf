@@ -25,3 +25,8 @@ variable "sn3_ipv4_cidr" {
     description = "ipv4 cidr block"
     default = "192.168.3.0/24"
 }
+variable "aws_region" {
+    type=string
+    description = "aws region"
+    default="ap-southeast-2"
+}
