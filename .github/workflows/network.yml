@@ -46,7 +46,7 @@ jobs:
       - name: Validate branch
         run: |
           if [[ $BRANCH_NAME == "env/"* ]]; then
-            echo "Valid branch. Current branch is: "
+            echo "Valid branch. Current branch is: $($BRANCH_NAME)"
           else
             echo "Invalid branch. Branch must be under env/*"
             exit 1
