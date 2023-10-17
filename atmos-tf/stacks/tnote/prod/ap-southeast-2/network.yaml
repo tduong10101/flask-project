@@ -4,5 +4,8 @@ components:
   terraform:
     network:
       vars:
-        ipv4_cidr: "10.10.0.0/16"
+        ipv4_cidr: "10.0.0.0/16"
         namespace: "tnote-prod"
+        sn1_ipv4_cidr: "10.0.1.0/24"
+        sn2_ipv4_cidr: "10.0.2.0/24"
+        sn3_ipv4_cidr: "10.0.3.0/24"
