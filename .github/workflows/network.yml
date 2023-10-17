@@ -66,6 +66,10 @@ jobs:
       - name: Run terraform deploy
         if: ${{ inputs.terraform_job == 'deploy' || github.event_name == 'push'}}
         run: atmos terraform deploy network -s $STACK
+      - name: Enter terraform shell
+        if: ${{ inputs.terraform_job == 'destroy'}}
+        run: | 
+          atmos terraform shell network -s $STACK
       - name: Run terraform destroy
         if: ${{ inputs.terraform_job == 'destroy'}}
-        run: atmos terraform destroy network -s $STACK
+        run: terraform destroy -auto-approve
