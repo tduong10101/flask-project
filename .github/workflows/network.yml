@@ -1,9 +1,17 @@
 name: network
 on:
+  push:
+    branches: ["env/*"]
   pull_request:
-    types: [opened, reopened, closed]
   workflow_dispatch:
-
+    inputs:
+      terraform_job:
+        type: choice
+        description: terraform
+        options:
+          - plan
+          - deploy
+          - destroy
 env:
   BRANCH_NAME: ${{github.base_ref || github.ref_name}}
 
@@ -50,11 +58,14 @@ jobs:
             echo "Invalid branch. Branch must be under env/*"
             exit 1
           fi
+      - name: Set env
+        run: echo "STACK=${BRANCH_NAME#evn/}"  >> $GITHUB_ENV
       - name: Run terraform plan
-        run: |
-          export stack=${BRANCH_NAME#env/}
-          atmos terraform plan network -s $stack
-# check if PR type is opened
-# then run atmos tf plan
-# check if PR type is closed
-# then run tf apply
+        if: ${{ inputs.terraform_job == 'plan' || github.event_name != 'push' }}
+        run: atmos terraform plan network -s $STACK
+      - name: Run terraform deploy
+        if: ${{ inputs.terraform_job == 'deploy' || github.event_name == 'push'}}
+        run: atmos terraform deploy network -s $STACK
+      - name: Run terraform destroy
+        if: ${{ inputs.terraform_job == 'destroy'}}
+        run: atmos terraform destroy network -s $STACK
