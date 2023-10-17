@@ -69,7 +69,7 @@ jobs:
       - name: Enter terraform shell
         if: ${{ inputs.terraform_job == 'destroy'}}
         run: | 
-          atmos terraform shell network -s tnote-dev-apse2
+          atmos terraform shell network -s $STACK
       - name: Run terraform destroy
         if: ${{ inputs.terraform_job == 'destroy'}}
         run: terraform destroy -auto-approve
