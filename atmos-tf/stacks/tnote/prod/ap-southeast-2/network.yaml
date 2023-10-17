@@ -1,0 +1,8 @@
+import:
+- tnote/prod/ap-southeast-2/_defaults
+components:
+  terraform:
+    network:
+      vars:
+        ipv4_cidr: "10.10.0.0/16"
+        namespace: "tnote-prod"
