@@ -61,7 +61,7 @@ jobs:
       - name: Set env
         run: echo "STACK=${BRANCH_NAME#env/}"  >> $GITHUB_ENV
       - name: Run terraform plan
-        if: ${{ inputs.terraform_job == 'plan' || github.event_name != 'push' }}
+        if: ${{ inputs.terraform_job == 'plan' || (github.event_name != 'push' && github.event_name != 'workflow_dispatch') }}
         run: atmos terraform plan network -s $STACK
       - name: Run terraform deploy
         if: ${{ inputs.terraform_job == 'deploy' || github.event_name == 'push'}}
