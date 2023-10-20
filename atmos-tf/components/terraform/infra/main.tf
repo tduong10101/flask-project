@@ -1,6 +1,6 @@
 resource "aws_db_instance" "tnote-db" {
     allocated_storage = 10
-    db_name = "database"
+    db_name = "tnote-db"
     engine = "mysql"
     instance_class = "db.t3.micro"
     username = "root"

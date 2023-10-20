@@ -14,13 +14,12 @@ SQL_USERNAME=os.getenv('SQL_USERNAME')
 SQL_PASSWORD=os.getenv('SQL_PASSWORD')
 SQL_HOST=os.getenv('SQL_HOST')
 SQL_PORT=os.getenv('SQL_PORT')
-DB_NAME='database'
+DB_NAME=os.getenv('DB_NAME')
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'asdiuwqopttn23947'
-    url=f"mysql+pymysql://{SQL_USERNAME}:{SQL_PASSWORD}@{SQL_HOST}:{SQL_PORT}/database?charset=utf8"
-    print(url)
+    url=f"mysql+pymysql://{SQL_USERNAME}:{SQL_PASSWORD}@{SQL_HOST}:{SQL_PORT}/{DB_NAME}?charset=utf8"
     app.config['SQLALCHEMY_DATABASE_URI'] = url
     # app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1, x_prefix=1)
     db.init_app(app)
