@@ -37,7 +37,7 @@ resource "aws_subnet" "sn1" {
     cidr_block = var.sn1_ipv4_cidr
 
     tags = {
-        Name = var.namespace
+        Name = "${var.namespace}-1"
         Stage = var.stage
     }
     depends_on = [ aws_vpc.main ]
@@ -48,7 +48,7 @@ resource "aws_subnet" "sn2" {
     cidr_block = var.sn2_ipv4_cidr
 
     tags = {
-        Name = var.namespace
+        Name = "${var.namespace}-2"
         Stage = var.stage
     }
     depends_on = [ aws_vpc.main ]
@@ -59,7 +59,7 @@ resource "aws_subnet" "sn3" {
     cidr_block = var.sn3_ipv4_cidr
 
     tags = {
-        Name = var.namespace
+        Name = "${var.namespace}-3"
         Stage = var.stage
     }
     depends_on = [ aws_vpc.main ]
