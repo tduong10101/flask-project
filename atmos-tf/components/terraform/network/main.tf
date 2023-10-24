@@ -65,7 +65,7 @@ resource "aws_subnet" "sn3" {
   depends_on = [aws_vpc.main]
 }
 resource "aws_security_group" "tnote_ecs_sg" {
-  name   = "tnote_ecs_sg"
+  name   = "${var.namespace}_ecs_sg"
   vpc_id = aws_vpc.main.id
 
   ingress {
@@ -85,7 +85,7 @@ resource "aws_security_group" "tnote_ecs_sg" {
   }
 }
 resource "aws_security_group" "tnote_lb_sg" {
-  name   = "tnote_lb_sg"
+  name   = "${var.namespace}_lb_sg"
   vpc_id = aws_vpc.main.id
 
   ingress {
