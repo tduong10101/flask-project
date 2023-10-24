@@ -75,7 +75,7 @@ resource "aws_security_group" "tnote_ecs_sg" {
       protocol         = "tcp"
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"]
-    }
+    },
   ]
   egress = [
     {
@@ -84,7 +84,7 @@ resource "aws_security_group" "tnote_ecs_sg" {
       protocol         = "-1"
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"]
-    }
+    },
   ]
 }
 resource "aws_security_group" "tnote_lb_sg" {
