@@ -21,7 +21,7 @@ jobs:
         defaults:
             run:
                 shell: bash
-                working-directory: "./atmos-tf/components/terraform/"
+                working-directory: "./atmos-tf/components/terraform/infra/"
 
         steps:
             - name: Checkout
