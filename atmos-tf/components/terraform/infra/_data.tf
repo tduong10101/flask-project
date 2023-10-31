@@ -21,11 +21,9 @@ data "template_file" "ecs_user_data" {
   template = <<EOF
 #!/bin/bash
 sudo yum install -y ecs-init
-sudo bash -c 'sudo echo ECS_CLUSTER=${aws_ecs_cluster.tnote_ecs_cluster.name} >> /etc/ecs/ecs.config'
+sudo echo ECS_CLUSTER=${aws_ecs_cluster.tnote_ecs_cluster.name} | sudo tee /etc/ecs/ecs.config
 sudo systemctl start docker
 sudo systemctl start ecs
-sudo systemctl enable docker
-sudo systemctl enable ecs
 EOF
 }
 data "aws_iam_role" "ecs_te_role" {
