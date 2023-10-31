@@ -1,4 +1,17 @@
 variable "db_pass" {
-    sensitive = true
-    type = string
+  sensitive = true
+  type      = string
+}
+variable "aws_region" {
+  type        = string
+  description = "aws region"
+  default     = "ap-southeast-2"
+}
+variable "namespace" {
+  type        = string
+  description = "namespace"
+}
+variable "stage" {
+  type        = string
+  description = "stage"
 }
