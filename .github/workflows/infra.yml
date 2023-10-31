@@ -41,8 +41,9 @@ jobs:
               run: |
                   cat > "./vars.tfvars" <<EOF
                     db_pass = "${{ secrets.db_pass }}"
-                    namespace = tnote-dev
-                    stage = dev
+                    namespace = "tnote-dev"
+                    stage = ":w
+                    dev"
                   EOF
 
                   cat ./vars.tfvars
