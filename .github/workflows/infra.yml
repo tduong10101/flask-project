@@ -21,7 +21,7 @@ jobs:
         defaults:
             run:
                 shell: bash
-                working-directory: ".atmos-tf/components/terraform/"
+                working-directory: "./atmos-tf/components/terraform/"
 
         steps:
             - name: Checkout
@@ -41,6 +41,8 @@ jobs:
               run: |
                   cat > "./vars.tfvars" <<EOF
                     db_pass = "${{ secrets.db_pass }}"
+                    namespace = tnote-dev
+                    stage = dev
                   EOF
 
                   cat ./vars.tfvars
