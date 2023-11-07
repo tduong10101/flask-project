@@ -9,7 +9,6 @@ resource "aws_db_subnet_group" "db_sn" {
 
 resource "aws_db_instance" "tnote_db" {
   allocated_storage      = 10
-  db_name                = "tnotedb"
   engine                 = "mysql"
   instance_class         = "db.t3.micro"
   username               = "root"
@@ -131,13 +130,13 @@ resource "aws_ecs_task_definition" "tnote_td" {
   family                = "${var.namespace}_td"
   network_mode          = "awsvpc"
   execution_role_arn    = data.aws_iam_role.ecs_te_role.arn
-  cpu                   = 512
+  cpu                   = 1024
   container_definitions = <<DEFINITION
   [
     {
       "name"   : "tnote_docker",
       "image"  : "069363837566.dkr.ecr.ap-southeast-2.amazonaws.com/my-ecr-repo:tnote",
-      "cpu"    : 512,
+      "cpu"    : 1024,
       "memory" : 2048,
       "environment" : [
         {
@@ -158,7 +157,7 @@ resource "aws_ecs_task_definition" "tnote_td" {
         },
         {
           "name"  : "DB_NAME",
-          "value" : "${aws_db_instance.tnote_db.db_name}"
+          "value" : "tnotedb"
         }
       ],
       "portMappings" : [
