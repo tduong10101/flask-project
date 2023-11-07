@@ -1,19 +1,30 @@
+resource "aws_db_subnet_group" "db_sn" {
+  name       = "tnote_db_sn"
+  subnet_ids = data.aws_subnets.tnote_sn.ids
+
+  tags = {
+    Name = "tnote-db subnet"
+  }
+}
+
 resource "aws_db_instance" "tnote_db" {
-  allocated_storage   = 10
-  db_name             = "tnotedb"
-  engine              = "mysql"
-  instance_class      = "db.t3.micro"
-  username            = "root"
-  password            = var.db_pass
-  port                = 3306
-  publicly_accessible = true
-  skip_final_snapshot = true
+  allocated_storage      = 10
+  db_name                = "tnotedb"
+  engine                 = "mysql"
+  instance_class         = "db.t3.micro"
+  username               = "root"
+  password               = var.db_pass
+  port                   = 3306
+  publicly_accessible    = true
+  skip_final_snapshot    = true
+  db_subnet_group_name   = aws_db_subnet_group.db_sn.name
+  vpc_security_group_ids = ["${data.aws_security_group.db_sg.id}"]
 }
 
 resource "aws_launch_template" "tnote_lt" {
   name_prefix   = "${var.namespace}_template"
-  image_id      = "ami-09b402d0a0d6b112b"
-  instance_type = "t3.micro"
+  image_id      = "ami-07b5c2e394fccab6e"
+  instance_type = "t3.medium"
   key_name      = "aws-ec2-kp"
 
   instance_initiated_shutdown_behavior = "terminate"
@@ -39,8 +50,8 @@ resource "aws_launch_template" "tnote_lt" {
     }
   }
 
-  user_data = base64encode(data.template_file.ecs_user_data.rendered)
-
+  user_data  = base64encode(data.template_file.ecs_user_data.rendered)
+  depends_on = [aws_ecs_cluster.tnote_ecs_cluster]
 }
 
 resource "aws_autoscaling_group" "tnote_acg" {
@@ -58,7 +69,7 @@ resource "aws_lb" "tnote_alb" {
   name               = "${var.namespace}-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [data.aws_security_group.alb_sg.id]
+  security_groups    = ["${data.aws_security_group.alb_sg.id}"]
   subnets            = data.aws_subnets.tnote_sn.ids
   tags = {
     Name = "${var.namespace}_alb"
@@ -78,7 +89,7 @@ resource "aws_lb_listener" "tnote_alb_listener" {
 
 resource "aws_lb_target_group" "tnote_tg" {
   name        = "${var.namespace}-target-group"
-  port        = 8000
+  port        = 80
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = data.aws_vpc.tnote_vpc.id
@@ -117,52 +128,77 @@ resource "aws_ecs_cluster_capacity_providers" "tnote_ecs_cluster_cp" {
 }
 
 resource "aws_ecs_task_definition" "tnote_td" {
-  family             = "${var.namespace}_td"
-  network_mode       = "awsvpc"
-  execution_role_arn = data.aws_iam_role.ecs_te_role.arn
-  cpu                = 1024
-  container_definitions = jsonencode([
+  family                = "${var.namespace}_td"
+  network_mode          = "awsvpc"
+  execution_role_arn    = data.aws_iam_role.ecs_te_role.arn
+  cpu                   = 512
+  container_definitions = <<DEFINITION
+  [
     {
-      name   = "tnote_docker"
-      image  = "069363837566.dkr.ecr.ap-southeast-2.amazonaws.com/my-ecr-repo::latest"
-      memory = 2048
-      environment = [
+      "name"   : "tnote_docker",
+      "image"  : "069363837566.dkr.ecr.ap-southeast-2.amazonaws.com/my-ecr-repo:tnote",
+      "cpu"    : 512,
+      "memory" : 2048,
+      "environment" : [
         {
-          name         = "tnote_docker"
-          SQL_USERNAME = aws_db_instance.tnote_db.username
-          SQL_PASSWORD = var.db_pass
-          SQL_HOST     = aws_db_instance.tnote_db.address
-          SQL_PORT     = aws_db_instance.tnote_db.port
-          DB_NAME      = aws_db_instance.tnote_db.db_name
-        }
-      ]
-      portMappings = [
+          "name"  : "SQL_USERNAME",
+          "value" : "${aws_db_instance.tnote_db.username}"
+        },
         {
-          containerPort = 8000
-          hostPort      = 8000
+          "name"  : "SQL_PASSWORD",
+          "value" : "${var.db_pass}"
+        },
+        {
+          "name"  : "SQL_HOST",
+          "value" : "${aws_db_instance.tnote_db.address}"
+        },
+        {
+          "name"  : "SQL_PORT",
+          "value" : "${aws_db_instance.tnote_db.port}"
+        },
+        {
+          "name"  : "DB_NAME",
+          "value" : "${aws_db_instance.tnote_db.db_name}"
         }
-      ]
+      ],
+      "portMappings" : [
+        {
+          "containerPort" : 80,
+          "hostPort"      : 80
+        }
+      ],
+      "logConfiguration": { 
+        "logDriver": "awslogs",
+        "options": { 
+            "awslogs-group" : "/ecs/tnote-ecs-log",
+            "awslogs-region": "${var.aws_region}",
+            "awslogs-stream-prefix": "ecs"
+        }
+      }
     }
-  ])
+  ]
+  DEFINITION
 }
-
+resource "aws_cloudwatch_log_group" "tnote_ecs_lg" {
+  name              = "/ecs/tnote-ecs-log"
+  retention_in_days = 1
+}
 resource "aws_ecs_service" "tnote_ecs_service" {
   name            = "${var.namespace}_service"
   cluster         = aws_ecs_cluster.tnote_ecs_cluster.id
   task_definition = aws_ecs_task_definition.tnote_td.arn
   desired_count   = 1
+  triggers = {
+    redeployment = true
+  }
   network_configuration {
     subnets         = data.aws_subnets.tnote_sn.ids
-    security_groups = [data.aws_security_group.ecs_sg.id]
+    security_groups = ["${data.aws_security_group.ecs_sg.id}"]
   }
 
   force_new_deployment = true
   placement_constraints {
     type = "distinctInstance"
-  }
-
-  triggers = {
-    redeployment = timestamp()
   }
 
   capacity_provider_strategy {
@@ -172,7 +208,7 @@ resource "aws_ecs_service" "tnote_ecs_service" {
   load_balancer {
     target_group_arn = aws_lb_target_group.tnote_tg.arn
     container_name   = "tnote_docker"
-    container_port   = 8000
+    container_port   = 80
   }
 
   depends_on = [aws_autoscaling_group.tnote_acg]
