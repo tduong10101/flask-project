@@ -126,7 +126,7 @@ resource "aws_security_group" "tnote_db_sg" {
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
-    security_groups = ["${aws_security_group.tnote_ecs_sg}"]
+    security_groups = ["${aws_security_group.tnote_ecs_sg.id}"]
   }
 
   egress {
