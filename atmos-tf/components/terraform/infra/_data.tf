@@ -32,3 +32,6 @@ EOF
 data "aws_iam_role" "ecs_te_role" {
   name = "ecsTaskExecutionRole"
 }
+data "aws_route53_zone" "tdinvoke" {
+  name = "tdinvoke.net"
+}

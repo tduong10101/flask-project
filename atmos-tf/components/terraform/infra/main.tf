@@ -64,6 +64,17 @@ resource "aws_autoscaling_group" "tnote_acg" {
   }
 }
 
+resource "aws_route53_record" "tnote_record" {
+  zone_id = data.aws_route53_zone.tdinvoke.id
+  name    = "tnote.tdinvoke.net"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.tnote_alb.name
+    zone_id                = aws_lb.tnote_alb.zone_id
+    evaluate_target_health = true
+  }
+}
 resource "aws_lb" "tnote_alb" {
   name               = "${var.namespace}-alb"
   internal           = false
@@ -77,8 +88,8 @@ resource "aws_lb" "tnote_alb" {
 
 resource "aws_lb_listener" "tnote_alb_listener" {
   load_balancer_arn = resource.aws_lb.tnote_alb.arn
-  port              = 80
-  protocol          = "HTTP"
+  port              = 443
+  protocol          = "HTTPS"
 
   default_action {
     type             = "forward"
