@@ -96,6 +96,10 @@ resource "aws_lb_listener" "tnote_alb_listener" {
     target_group_arn = resource.aws_lb_target_group.tnote_tg.arn
   }
 }
+resource "aws_lb_listener_certificate" "tnote_alb_listener_cert" {
+  listener_arn    = aws_lb_listener.tnote_alb_listener.arn
+  certificate_arn = data.aws_acm_certificate.cert.arn
+}
 
 resource "aws_lb_target_group" "tnote_tg" {
   name        = "${var.namespace}-target-group"

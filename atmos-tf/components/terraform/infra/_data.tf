@@ -35,3 +35,6 @@ data "aws_iam_role" "ecs_te_role" {
 data "aws_route53_zone" "tdinvoke" {
   name = "tdinvoke.net"
 }
+data "aws_acm_certificate" "cert" {
+  domain = "tdinvoke.net"
+}
