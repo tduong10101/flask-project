@@ -70,7 +70,7 @@ resource "aws_route53_record" "tnote_record" {
   type    = "A"
 
   alias {
-    name                   = aws_lb.tnote_alb.name
+    name                   = aws_lb.tnote_alb.dns_name
     zone_id                = aws_lb.tnote_alb.zone_id
     evaluate_target_health = true
   }
