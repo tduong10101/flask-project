@@ -90,15 +90,11 @@ resource "aws_lb_listener" "tnote_alb_listener" {
   load_balancer_arn = resource.aws_lb.tnote_alb.arn
   port              = 443
   protocol          = "HTTPS"
-
+  certificate_arn   = data.aws_acm_certificate.cert.arn
   default_action {
     type             = "forward"
     target_group_arn = resource.aws_lb_target_group.tnote_tg.arn
   }
-}
-resource "aws_lb_listener_certificate" "tnote_alb_listener_cert" {
-  listener_arn    = aws_lb_listener.tnote_alb_listener.arn
-  certificate_arn = data.aws_acm_certificate.cert.arn
 }
 
 resource "aws_lb_target_group" "tnote_tg" {
