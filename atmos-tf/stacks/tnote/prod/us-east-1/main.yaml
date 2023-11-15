@@ -9,5 +9,4 @@ components:
         sn2_ipv4_cidr: "10.0.2.0/24"
         sn3_ipv4_cidr: "10.0.3.0/24"
     infra:
-      vars:
       
