@@ -5,4 +5,5 @@ components:
     network:
       vars:
         ipv4_cidr: "192.168.0.0/16"
-        namespace: "tnote-dev"
+    infra:
+      vars:
