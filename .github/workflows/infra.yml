@@ -12,7 +12,7 @@ on:
                   - destroy
 env:
   BRANCH_NAME: ${{github.base_ref || github.ref_name}}
-  TF_VAR_DB_PASS: ${{ secrets.db_pass }}
+  TF_VAR_db_pass: ${{ secrets.db_pass }}
 permissions:
     contents: read
     id-token: write
