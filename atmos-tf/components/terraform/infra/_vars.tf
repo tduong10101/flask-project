@@ -15,3 +15,13 @@ variable "stage" {
   type        = string
   description = "stage"
 }
+
+variable "r53_zone_name" {
+  type        = string
+  description = "aws route 53 zone name"
+}
+
+variable "acm_cert_domain" {
+  type        = string
+  description = "aws acm certificate domain"
+}

@@ -6,5 +6,7 @@ components:
       vars:
         ipv4_cidr: "192.168.0.0/16"
     infra:
-      vars: {}
+      vars:
+        r53_zone_name: "tdinvoke.net"
+        acm_cert_domain:  "tdinvoke.net"
 

@@ -33,8 +33,8 @@ data "aws_iam_role" "ecs_te_role" {
   name = "ecsTaskExecutionRole"
 }
 data "aws_route53_zone" "tdinvoke" {
-  name = "tdinvoke.net"
+  name = var.r53_zone_name
 }
 data "aws_acm_certificate" "cert" {
-  domain = "tdinvoke.net"
+  domain = var.acm_cert_domain
 }
