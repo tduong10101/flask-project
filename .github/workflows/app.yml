@@ -24,7 +24,7 @@ jobs:
             - name: Configure AWS credentials
               uses: aws-actions/configure-aws-credentials@v4
               with:
-                  role-to-assume: arn:aws:iam::${{ vars.aws_acc_num }}:role/github-ecr-img-builder
+                  role-to-assume: arn:aws:iam::${{ vars.AWS_ACC_NUM }}:role/github-ecr-img-builder
                   role-session-name: GitHub_to_AWS_via_FederatedOIDC
                   aws-region: ap-southeast-2
 

@@ -37,7 +37,7 @@ jobs:
             - name: configure aws credentials
               uses: aws-actions/configure-aws-credentials@v4
               with:
-                  role-to-assume: arn:aws:iam::${{ vars.aws_acc_num }}:role/github-tnote-terraform
+                  role-to-assume: arn:aws:iam::${{ vars.AWS_ACC_NUM }}:role/github-tnote-terraform
                   role-session-name: GitHub_to_AWS_via_FederatedOIDC
                   aws-region: ap-southeast-2
             - name: Setup Atmos
