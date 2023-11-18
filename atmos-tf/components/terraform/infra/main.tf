@@ -23,7 +23,7 @@ resource "aws_db_instance" "tnote_db" {
 resource "aws_launch_template" "tnote_lt" {
   name_prefix   = "${var.namespace}_template"
   image_id      = "ami-07b5c2e394fccab6e"
-  instance_type = "t3.micro"
+  instance_type = "t3.medium"
   key_name      = "aws-ec2-kp"
 
   instance_initiated_shutdown_behavior = "terminate"
