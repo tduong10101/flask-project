@@ -124,12 +124,11 @@ resource "aws_ecs_capacity_provider" "tnote_ecs_cp" {
       target_capacity           = 3
     }
   }
-  depends_on = [aws_autoscaling_group.tnote_acg]
 }
 resource "aws_ecs_cluster_capacity_providers" "tnote_ecs_cluster_cp" {
   cluster_name = aws_ecs_cluster.tnote_ecs_cluster.name
 
-  capacity_providers = [aws_ecs_capacity_provider.tnote_ecs_cp.name]
+  capacity_providers = [aws_ecs_capacity_provider.tnote_ecs_cp.arn]
 
   default_capacity_provider_strategy {
     base              = 1

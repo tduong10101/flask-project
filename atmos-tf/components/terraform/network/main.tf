@@ -1,6 +1,6 @@
 resource "aws_vpc" "main" {
-  cidr_block = var.ipv4_cidr
-
+  cidr_block           = var.ipv4_cidr
+  enable_dns_hostnames = true
   tags = {
     Name  = var.namespace
     Stage = var.stage
