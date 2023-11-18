@@ -9,5 +9,6 @@ components:
         sn2_ipv4_cidr: "10.0.2.0/24"
         sn3_ipv4_cidr: "10.0.3.0/24"
     infra:
-      vars: {}
-
+      vars: 
+        r53_zone_name: "tdinvoke.net"
+        acm_cert_domain:  "tdinvoke.net"
