@@ -61,7 +61,7 @@ jobs:
               if: ${{ inputs.terraform_job == 'plan' || github.event_name != 'workflow_dispatch' }}
               run: atmos terraform plan infra -s $STACK
             - name: Run terraform deploy
-              if: ${{ inputs.terraform_job == 'deploy' }}
+              if: ${{ inputs.terraform_job == 'apply' }}
               run: atmos terraform deploy infra -s $STACK
             - name: Run terraform destroy
               if: ${{ inputs.terraform_job == 'destroy'}}
