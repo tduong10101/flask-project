@@ -148,7 +148,7 @@ resource "aws_ecs_task_definition" "tnote_td" {
       "name"   : "tnote_docker",
       "image"  : "069363837566.dkr.ecr.ap-southeast-2.amazonaws.com/my-ecr-repo:tnote",
       "cpu"    : 512,
-      "memory" : 1024,
+      "memory" : 512,
       "environment" : [
         {
           "name"  : "SQL_USERNAME",
