@@ -8,16 +8,16 @@ resource "aws_db_subnet_group" "db_sn" {
 }
 
 resource "aws_db_instance" "tnote_db" {
-  allocated_storage      = 10
-  engine                 = "mysql"
-  instance_class         = "db.t3.micro"
-  username               = "root"
-  password               = var.db_pass
-  port                   = 3306
-  publicly_accessible    = true
-  skip_final_snapshot    = true
-  db_subnet_group_name   = aws_db_subnet_group.db_sn.name
-  vpc_security_group_ids = ["${data.aws_security_group.db_sg.id}"]
+  allocated_storage   = 10
+  engine              = "mysql"
+  instance_class      = "db.t3.micro"
+  username            = "root"
+  password            = var.db_pass
+  port                = 3306
+  publicly_accessible = true
+  skip_final_snapshot = true
+  # db_subnet_group_name   = aws_db_subnet_group.db_sn.name
+  # vpc_security_group_ids = ["${data.aws_security_group.db_sg.id}"]
 }
 
 resource "aws_launch_template" "tnote_lt" {
