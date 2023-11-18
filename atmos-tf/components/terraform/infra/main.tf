@@ -23,7 +23,7 @@ resource "aws_db_instance" "tnote_db" {
 resource "aws_launch_template" "tnote_lt" {
   name_prefix   = "${var.namespace}_template"
   image_id      = "ami-07b5c2e394fccab6e"
-  instance_type = "t3.medium"
+  instance_type = "t3.micro"
   key_name      = "aws-ec2-kp"
 
   instance_initiated_shutdown_behavior = "terminate"
@@ -141,14 +141,14 @@ resource "aws_ecs_task_definition" "tnote_td" {
   family                = "${var.namespace}_td"
   network_mode          = "awsvpc"
   execution_role_arn    = data.aws_iam_role.ecs_te_role.arn
-  cpu                   = 1024
+  cpu                   = 512
   container_definitions = <<DEFINITION
   [
     {
       "name"   : "tnote_docker",
       "image"  : "069363837566.dkr.ecr.ap-southeast-2.amazonaws.com/my-ecr-repo:tnote",
-      "cpu"    : 1024,
-      "memory" : 2048,
+      "cpu"    : 512,
+      "memory" : 1024,
       "environment" : [
         {
           "name"  : "SQL_USERNAME",
