@@ -23,7 +23,7 @@ resource "aws_db_instance" "tnote_db" {
 resource "aws_launch_template" "tnote_lt" {
   name_prefix   = "${var.namespace}_template"
   image_id      = "ami-07b5c2e394fccab6e"
-  instance_type = "t3.small"
+  instance_type = "t3.micro"
   key_name      = "aws-ec2-kp"
 
   instance_initiated_shutdown_behavior = "terminate"
@@ -128,7 +128,7 @@ resource "aws_ecs_capacity_provider" "tnote_ecs_cp" {
 resource "aws_ecs_cluster_capacity_providers" "tnote_ecs_cluster_cp" {
   cluster_name = aws_ecs_cluster.tnote_ecs_cluster.name
 
-  capacity_providers = [aws_ecs_capacity_provider.tnote_ecs_cp.arn]
+  capacity_providers = [aws_ecs_capacity_provider.tnote_ecs_cp.name]
 
   default_capacity_provider_strategy {
     base              = 1
